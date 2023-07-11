@@ -1,0 +1,238 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock title %}
+
+
+{% block main %}
+    <div class="d-flex justify-content-between mt-5">
+        <div class="col-3 p-2">
+            <div class="card bg-dark">
+                <img src="{{ comic.get_poster }}" alt="">
+            </div>
+            <div class="d-grid gap-2 py-4">
+                <a href="" class="btn btn-primary">Начать чтение</a>
+                <a href="" class="btn btn-danger">Отслеживать</a>
+                <a href="" class="btn btn-success">Добавить в закладки</a>
+
+            </div>
+        </div>
+        <div class="col-9 text-light p-2">
+            <h3>{{ comic.title }}</h3>
+            <ul class="nav " id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active bg-dark text-warning btn px-4 mx-2" id="home-tab"
+                            data-bs-toggle="tab" data-bs-target="#home-tab-pane"
+                            type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Описание
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link bg-dark text-warning btn px-4 mx-2" id="profile-tab" data-bs-toggle="tab"
+                            data-bs-target="#profile-tab-pane"
+                            type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Главы
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link bg-dark text-warning btn px-4 mx-2" id="contact-tab" data-bs-toggle="tab"
+                            data-bs-target="#contact-tab-pane"
+                            type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Комментарии
+                    </button>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
+                     tabindex="0">
+
+                    <p>{{ comic.description }}</p>
+
+                    <div class="d-flex justify-content-start">
+                        {% for genre in comic.genres.all %}
+                            <a href="{% url 'genre' genre.pk %}"
+                               class="btn btn-outline-warning mx-1 px-4">{{ genre }}</a>
+                        {% endfor %}
+                    </div>
+                    <a href="{% url 'volume' comic.pk %}" class="btn btn-outline-success mt-2">Список томов</a>
+                    <a href="{% url 'update' comic.pk %}" class="btn btn-outline-primary mt-2">Изменить</a>
+                    <a href="{% url 'delete' comic.pk %}" class="btn btn-outline-danger mt-2">Удалить</a>
+
+                </div>
+                <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
+                     tabindex="0">
+                    <div class="list-group bg-dark">
+                        {% for chapter in chapters %}
+                            <a href="{% url 'chapter' chapter.pk %}"
+                               class="text-light bg-dark list-group-item list-group-item-action">{{ chapter }}</a>
+
+                        {% endfor %}
+                    </div>
+
+
+                </div>
+                <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab"
+                     tabindex="0">
+                    {% for comment in comments %}
+
+                        <div class="card dark-card my-4 p-4">
+
+                            <h4 class="text-light my-4">{{ comment.user }}</h4>
+                            <p class="text-light">{{ comment.text }}</p>
+                            <p class="text-secondary small">{{ comment.created_at }}</p>
+                        </div>
+                    {% endfor %}
+                    {% if request.user.is_authenticated %}
+                        <form action="{% url 'save_comment' comic.pk %}" method="post">
+                            {% csrf_token %}
+                            {{ comment_form.as_p }}
+                            <button type="submit" class="btn btn-warning">Оставить комментарий</button>
+                        </form>
+                    {% else %}
+                        <h3 class="text-light">Чтобы оставить комментарий. Войдите в аккаунт</h3>
+                    {% endif %}
+                </div>
+            </div>
+
+
+            <div class="d-flex justify-content-between py-4 dark-card">
+                <div class="col-6">
+
+                    <h5 class="text-light">В СПИСКАХ У 23 ЧЕЛОВЕК</h5>
+                    <table>
+
+                        <tr>
+                            <td>Читают</td>
+                            <td>
+                                <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="14"
+                                     aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar bg-warning" style="width: 14%"></div>
+                                </div>
+                            </td>
+                            <td>14%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Буду читать</td>
+                            <td>
+                                <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="70"
+                                     aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar bg-warning" style="width: 70%"></div>
+                                </div>
+                            </td>
+                            <td>70%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Прочитано</td>
+                            <td>
+                                <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="9"
+                                     aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar bg-warning" style="width: 9%"></div>
+                                </div>
+                            </td>
+                            <td>9%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Отложено</td>
+                            <td>
+                                <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="5"
+                                     aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar bg-warning" style="width: 5%"></div>
+                                </div>
+                            </td>
+                            <td>5%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Брошено</td>
+                            <td class="col-8">
+                                <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="5"
+                                     aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar bg-warning" style="width: 5%"></div>
+                                </div>
+                            </td>
+                            <td>5%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Не понравилось</td>
+                            <td >
+                                <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0"
+                                     aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar bg-warning" style="width: 0%"></div>
+                                </div>
+                            </td>
+                            <td>0%
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+                <div class="col-6">
+                    <h5 class="text-light">ОЦЕНКИ ПОЛЬЗОВАТЕЛЕЙ</h5>
+                    <table class="col-12">
+
+                        <tr>
+                            <td>5<i class="bi bi-star"></i></td>
+                            <td class="col-10">
+                                <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="14"
+                                     aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar bg-warning" style="width: 14%"></div>
+                                </div>
+                            </td>
+                            <td>14%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4<i class="bi bi-star"></i></td>
+                            <td class="col-10">
+                                <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="70"
+                                     aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar bg-warning" style="width: 70%"></div>
+                                </div>
+                            </td>
+                            <td>70%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3<i class="bi bi-star"></i></td>
+                            <td class="col-10">
+                                <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="9"
+                                     aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar bg-warning" style="width: 9%"></div>
+                                </div>
+                            </td>
+                            <td>9%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2<i class="bi bi-star"></i></td>
+                            <td  class="col-10">
+                                <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="5"
+                                     aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar bg-warning" style="width: 5%"></div>
+                                </div>
+                            </td>
+                            <td>5%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>1<i class="bi bi-star"></i></td>
+                            <td class="col-10">
+                                <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="5"
+                                     aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar bg-warning" style="width: 5%"></div>
+                                </div>
+                            </td>
+                            <td>5%
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+{% endblock main %}

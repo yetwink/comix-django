@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+
+{% block main %}
+
+<div class="text-light">
+    {% for chapter in chapters %}
+    <p><a href="{% url 'pictures' pk id chapter.pk %}">
+
+        {{ chapter }}
+    </a>
+    </p>
+    {% endfor %}
+
+    <a href="{% url 'add_chapter' pk id %}" class="btn btn-outline-success mt-2">Добавить главу</a>
+
+</div>
+{% endblock main %}

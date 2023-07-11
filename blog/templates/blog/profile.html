@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock title %}
+
+
+{% block main %}
+
+    <div class="card dark-card p-4 mt-4">
+        <h3 class="text-light">Просмотр профиля</h3>
+        <img src="{{ profile.get_profile_bg }}" alt="" style="height: 200px; object-fit: cover">
+
+    <div class="d-flex justify-content-start mt-4">
+        <div class="image p-4">
+            <img class="rounded-circle" src="{{ profile.get_photo }}" width="100px" height="100px" alt="">
+        </div>
+        <div class="text-light py-4 px-2 ">
+            <h4>{{ profile.user.username }}</h4>
+            <h4>{{ profile.user.first_name }}</h4>
+            <h4>{{ profile.user.last_name }}</h4>
+                {% if profile.user.is_active %}
+        <button class="btn btn-success">В сети</button>
+    {% else %}
+        <button class="btn btn-danger">Не в сети</button>
+    {% endif %}
+        <p>{{ profile.bio }}</p>
+        </div>
+
+    </div>
+
+
+    <div class="text-light">
+        <p>Количество комментариев: {{ comments }}</p>
+        <p>Количество комиксов: {{ comics }}</p>
+    </div>
+        {% if request.user.pk == profile.user.pk %}
+        <a href="{% url 'edit' profile.user.pk %}" class="btn btn-primary" style="width: 100px">Изменить</a>
+        {% endif %}
+    </div>
+
+{% endblock main %}

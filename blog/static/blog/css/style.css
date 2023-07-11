@@ -1,0 +1,12 @@
+.text-orange:hover{
+    color: #FFBE0B!important;
+}
+
+.form-control:focus{
+    border-color: #FFBE0B!important;
+    box-shadow: 0 0 0 0.25rem rgba(255,190,11,.25);
+}
+
+.dark-card{
+    background-color: #141414;
+}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+
+{% block main %}
+
+<div class="d-flex justify-content-center mt-4">
+    <div class="card col-6 p-4">
+        <h3>{{ title }}</h3>
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-warning">Войти</button>
+
+        </form>
+    </div>
+</div>
+
+{% endblock main %}

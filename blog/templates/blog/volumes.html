@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+
+{% block main %}
+
+<div class="text-light">
+    {% for volume in volumes %}
+    <p>
+        <a href="{% url 'chapters' comics.pk volume.pk %}">
+        {{ volume }}
+        </a>
+    </p>
+    {% endfor %}
+
+    <a href="{% url 'add_volume' comics.pk %}" class="btn btn-outline-success mt-2">Добавить том</a>
+
+</div>
+{% endblock main %}

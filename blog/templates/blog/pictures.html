@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+
+{% block main %}
+
+<div class="text-light">
+    {% for picture in pictures %}
+        <div class="d-flex justify-content-center">
+            <div class="col-8 card my-4">
+                <img src="{{ picture.image.url }}" alt="">
+            </div>
+        </div>
+    {% endfor %}
+    {% if form %}
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-outline-success">Добавить изображение</button>
+    </form>
+    {% endif %}
+
+</div>
+{% endblock main %}
